@@ -3,7 +3,6 @@ package com.xekera.Ecommerce.di.module;
 import com.xekera.Ecommerce.data.rest.XekeraAPI;
 import com.xekera.Ecommerce.data.room.AppDatabase;
 import com.xekera.Ecommerce.ui.add_to_cart.AddToCartMVP;
-import com.xekera.Ecommerce.ui.add_to_cart.AddToCartModel;
 import com.xekera.Ecommerce.ui.add_to_cart.AddToCartPresenter;
 import com.xekera.Ecommerce.util.SessionManager;
 import com.xekera.Ecommerce.util.Utils;

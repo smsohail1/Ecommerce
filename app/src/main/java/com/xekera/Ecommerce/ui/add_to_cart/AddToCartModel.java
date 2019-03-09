@@ -1,10 +1,11 @@
 package com.xekera.Ecommerce.ui.add_to_cart;
 
+import com.xekera.Ecommerce.data.rest.INetworkListGeneral;
 import com.xekera.Ecommerce.data.rest.XekeraAPI;
+import com.xekera.Ecommerce.data.rest.response.add_to_cart_response.AddToCartResponse;
 import com.xekera.Ecommerce.data.room.AppDatabase;
 import com.xekera.Ecommerce.data.room.dao.AddToCartDao;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
-import com.xekera.Ecommerce.ui.shop_card_selected.ShopCardSelectedModel;
 import com.xekera.Ecommerce.util.Utils;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -12,6 +13,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.List;
 
@@ -276,8 +280,30 @@ public class AddToCartModel implements AddToCartMVP.Model {
 
     }
 
+    @Override
+    public void fetchCarts(String randomKey, final INetworkListGeneral<AddToCartResponse> iNetworkListGeneral) {
+        Call<AddToCartResponse> call = xekeraAPI.getAllCarts(randomKey);
+        call.enqueue(new Callback<AddToCartResponse>() {
+            @Override
+            public void onResponse(Call<AddToCartResponse> call, Response<AddToCartResponse> response) {
+                try {
+                    AddToCartResponse productResponse = response.body();
 
-    interface IFetchCartDetailsList {
+                    iNetworkListGeneral.onSuccess(productResponse);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddToCartResponse> call, Throwable t) {
+                iNetworkListGeneral.onFailure(t);
+            }
+        });
+    }
+
+    public  interface IFetchCartDetailsList {
         void onCartDetailsReceived(List<AddToCart> AddToCartList);
 
         void onErrorReceived(Exception ex);

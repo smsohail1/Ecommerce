@@ -2,17 +2,12 @@ package com.xekera.Ecommerce.ui.dasboard_shopping_details;
 
 import com.xekera.Ecommerce.data.rest.INetworkListGeneral;
 import com.xekera.Ecommerce.data.rest.XekeraAPI;
-import com.xekera.Ecommerce.data.rest.response.CategoryResponse;
 import com.xekera.Ecommerce.data.rest.response.ProductResponse;
 import com.xekera.Ecommerce.data.room.AppDatabase;
 import com.xekera.Ecommerce.data.room.dao.AddToCartDao;
 import com.xekera.Ecommerce.data.room.dao.FavouritesDao;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
 import com.xekera.Ecommerce.data.room.model.Favourites;
-import com.xekera.Ecommerce.ui.add_to_cart.AddToCartModel;
-import com.xekera.Ecommerce.ui.continue_shopping.ContinueShoppingModel;
-import com.xekera.Ecommerce.ui.dasboard_shopping_details.model.ShoppingDetailModel;
-import com.xekera.Ecommerce.ui.favourites.FavouritesModel;
 import com.xekera.Ecommerce.util.Utils;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -20,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -505,6 +501,30 @@ public class ShopDetailsModel implements ShopDetailsMVP.Model {
 
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
+                iNetworkListGeneral.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void addToCart(String productId, String quantity, String price, String discountPrice, String randomKey,
+                          final INetworkListGeneral<ResponseBody> iNetworkListGeneral) {
+        Call<ResponseBody> call = xekeraAPI.addToProducts(productId, quantity, price, randomKey);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    // AddToCartResponse productResponse = response.body();
+
+                    iNetworkListGeneral.onSuccess(response.body());
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 iNetworkListGeneral.onFailure(t);
             }
         });

@@ -5,17 +5,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import com.xekera.Ecommerce.data.rest.INetworkListGeneral;
-import com.xekera.Ecommerce.data.rest.response.CategoryResponse;
 import com.xekera.Ecommerce.data.rest.response.Product;
 import com.xekera.Ecommerce.data.rest.response.ProductResponse;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
 import com.xekera.Ecommerce.data.room.model.Favourites;
 import com.xekera.Ecommerce.ui.adapter.ShopDetailsAdapter;
-import com.xekera.Ecommerce.ui.add_to_cart.AddToCartModel;
-import com.xekera.Ecommerce.ui.continue_shopping.ContinueShoppingModel;
 import com.xekera.Ecommerce.ui.dasboard_shopping_details.model.ShoppingDetailModel;
-import com.xekera.Ecommerce.ui.favourites.FavouritesModel;
-import com.xekera.Ecommerce.ui.shop_card_selected.ShopCardSelectedModel;
+import okhttp3.ResponseBody;
 
 import java.util.List;
 
@@ -108,6 +104,9 @@ public interface ShopDetailsMVP {
                                         List<String> imgArrList, String nameSku);
 
         void setProductItemsDetails(Context context, String sku);
+
+        void addToCartApi(String productId, String quantity, String price, String discountPrice,
+                          String randomKey);
     }
 
     interface Model {
@@ -138,6 +137,9 @@ public interface ShopDetailsMVP {
 
         void getProductItemsDetails(String sku, INetworkListGeneral<ProductResponse> iNetworkListGeneral);
 
+        void addToCart(String productId, String quantity, String price, String discountPrice,
+                       String randomKey
+                , INetworkListGeneral<ResponseBody> iNetworkListGeneral);
 
     }
 }

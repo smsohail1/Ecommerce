@@ -1,8 +1,12 @@
 package com.xekera.Ecommerce.ui.add_to_cart;
 
+import com.xekera.Ecommerce.data.rest.INetworkListGeneral;
+import com.xekera.Ecommerce.data.rest.response.add_to_cart_response.AddToCartResponse;
+import com.xekera.Ecommerce.data.rest.response.add_to_cart_response.Product;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
 import com.xekera.Ecommerce.ui.adapter.AddToCartAdapter;
-import com.xekera.Ecommerce.ui.shop_card_selected.ShopCardSelectedModel;
+
+import com.xekera.Ecommerce.ui.add_to_cart.AddToCartModel;
 
 import java.util.List;
 
@@ -45,11 +49,12 @@ public interface AddToCartMVP {
 
         void setCartCounterTextview(int counts);
 
-        void setAdapter(List<AddToCart> addToCarts);
+        void setAdapter(List<Product> addToCarts);
 
         void removeItemFromAdapter(int position);
 
         void hideLoadingProgressDialog();
+
 
     }
 
@@ -69,9 +74,9 @@ public interface AddToCartMVP {
 
         void saveProductDetails(String quantity, long individualPrice, String itemPrice, String productName,
                                 String cutPrice, byte[] bytes, String imgUrl, String prodcutID, String isEmailSent,
-                                String productDesc, String imgArrList,String nameSku);
+                                String productDesc, String imgArrList, String nameSku);
 
-
+        void fetchCartsFromServer(String randomKey);
     }
 
     interface Model {
@@ -88,6 +93,8 @@ public interface AddToCartMVP {
         void getProductCount(String productName, AddToCartModel.IFetchCartDetailsList iFetchCartDetailsList);
 
         void saveProductDetails(AddToCart addToCart, AddToCartModel.ISaveProductDetails iSaveProductDetails);
+
+        void fetchCarts(String randomKey, INetworkListGeneral<AddToCartResponse> iNetworkListGeneral);
 
     }
 }

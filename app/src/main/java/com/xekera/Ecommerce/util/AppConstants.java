@@ -26,7 +26,8 @@ public class AppConstants {
 
     public static final String TIME_FORMAT_TWO = "hh:mm:ss";
     public static final String DATE_TIME_FORMAT_THREE = "ddMMyy_HHmmss_";
-    public static final String DATE_TIME_FORMAT_TWO = "AllProductsResponse-MM-yyyy HH:mm";
+    public static final String DATE_TIME_FORMAT_TWO = "dd-MM-yyyy HH:mm";
+    public static final String DATE_TIME_FORMAT_FOUR = "dd-MM-yyyy HH:mm:ss";
 
 
     public static final String PREF_NAME = "xekera.ecommerce";

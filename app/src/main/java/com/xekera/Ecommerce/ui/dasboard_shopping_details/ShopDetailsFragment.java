@@ -297,6 +297,17 @@ public class ShopDetailsFragment extends Fragment implements ShopDetailsMVP.View
         return v;
     }
 
+    private String getCurrentDateTime() {
+        try {
+
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df = new SimpleDateFormat(AppConstants.DATE_TIME_FORMAT_FOUR);
+            return df.format(c.getTime());
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     private void initializeViews(View v) {
         ButterKnife.bind(this, v);
         presenter.setView(this);
@@ -310,6 +321,10 @@ public class ShopDetailsFragment extends Fragment implements ShopDetailsMVP.View
 
         recyclerViewProductDetails.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        String dataTime = getCurrentDateTime();
+        if (utils.isTextNullOrEmpty(dataTime)) {
+            sessionManager.setKeyRandomKey("mobile" + dataTime);
+        }
         //  setTitle();
         //hideLoginIcon();
         // showBackImageIcon();
@@ -1217,7 +1232,7 @@ public class ShopDetailsFragment extends Fragment implements ShopDetailsMVP.View
 //        Log.d("kkjk2", separated[1][0]);
 //        Log.d("kkjk3", separated[2][0]);
 
-        shopDetailsAdapter = new ShopDetailsAdapter(getActivity(), products, this);
+        shopDetailsAdapter = new ShopDetailsAdapter(getActivity(), products, this, utils);
         showRecylerViewProductsDetail(shopDetailsAdapter);
         hideCircularProgressBar();
         showAllData();
@@ -1286,6 +1301,19 @@ public class ShopDetailsFragment extends Fragment implements ShopDetailsMVP.View
     @Override
     public void getIsFavourites(String productName, int position) {
         presenter.getFavouritesListByProductName(productName, position);
+    }
+
+    @Override
+    public void addToCart(Product productItems) {
+        presenter.addToCartApi(productItems.getId(), "1", productItems.getPrice(), productItems.getRegularPrice(),
+                sessionManager.getKeyRandomKey()
+        );
+
+    }
+
+    @Override
+    public void InternetError() {
+        toastUtil.showToastShortTime("Please connect to internet", toastView);
     }
 
 

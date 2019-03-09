@@ -3,16 +3,8 @@ package com.xekera.Ecommerce.ui.favourites;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
-import com.xekera.Ecommerce.data.room.model.Booking;
 import com.xekera.Ecommerce.data.room.model.Favourites;
 import com.xekera.Ecommerce.ui.adapter.FavoritesAdapter;
-import com.xekera.Ecommerce.ui.adapter.HistoryAdapter;
-import com.xekera.Ecommerce.ui.add_to_cart.AddToCartModel;
-import com.xekera.Ecommerce.ui.dasboard_shopping_details.ShopDetailsModel;
-import com.xekera.Ecommerce.ui.dasboard_shopping_details.ShopDetailsPresenter;
-import com.xekera.Ecommerce.ui.dasboard_shopping_details.model.ShoppingDetailModel;
-import com.xekera.Ecommerce.ui.history.HistoryMVP;
-import com.xekera.Ecommerce.ui.history.HistoryModel;
 
 import java.util.List;
 

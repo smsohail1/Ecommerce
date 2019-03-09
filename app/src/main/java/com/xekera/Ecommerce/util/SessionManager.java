@@ -27,6 +27,7 @@ public class SessionManager {
 
     private static final String KEY_PICTURE = "picture";
     private static final String KEY_IS_FAVOURITE_LIST = "favourite_list";
+    private static final String KEY_RANDOM_KEY = "random_key_cart";
 
 
     public static String KEY_CARD_NUMBER = "card_no";
@@ -87,6 +88,7 @@ public class SessionManager {
 
         editor.commit();
     }
+
 
     public void createLogin(String username, String phoneno, String userPassword, String email, boolean isSignUp,
                             boolean isLoginViaFacebook, String fbImageUrl, boolean isLoggedIn) {
@@ -158,6 +160,18 @@ public class SessionManager {
         editor.commit();
     }
 
+    public void setKeyRandomKey(String key) {
+        editor.putString(KEY_RANDOM_KEY, key);
+        editor.commit();
+
+    }
+
+    public String getKeyRandomKey()
+
+    {
+        return pref.getString(KEY_RANDOM_KEY, "");
+
+    }
 
     public String getKeyPlaceName() {
         return pref.getString(KEY_PLACE_NAME, "");

@@ -1,38 +1,21 @@
 package com.xekera.Ecommerce.ui.dasboard_shopping_details;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Query;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.xekera.Ecommerce.data.rest.INetworkListGeneral;
-import com.xekera.Ecommerce.data.rest.response.Category;
-import com.xekera.Ecommerce.data.rest.response.CategoryResponse;
 import com.xekera.Ecommerce.data.rest.response.Product;
 import com.xekera.Ecommerce.data.rest.response.ProductResponse;
 import com.xekera.Ecommerce.data.room.AppDatabase;
-import com.xekera.Ecommerce.data.room.dao.FavouritesDao;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
 import com.xekera.Ecommerce.data.room.model.Favourites;
-import com.xekera.Ecommerce.ui.BaseActivity;
 import com.xekera.Ecommerce.ui.adapter.ShopDetailsAdapter;
-import com.xekera.Ecommerce.ui.add_to_cart.AddToCartModel;
-import com.xekera.Ecommerce.ui.continue_shopping.ContinueShoppingModel;
-import com.xekera.Ecommerce.ui.continue_shopping.ContinueShoppingObjectModel;
 import com.xekera.Ecommerce.ui.dasboard_shopping_details.model.ShoppingDetailModel;
-import com.xekera.Ecommerce.ui.dashboard_shopping.adapter.DashboardAdapter;
-import com.xekera.Ecommerce.ui.favourites.FavouritesModel;
-import com.xekera.Ecommerce.ui.shop_card_selected.ShopCardSelectedModel;
 import com.xekera.Ecommerce.util.AppConstants;
 import com.xekera.Ecommerce.util.SessionManager;
 import com.xekera.Ecommerce.util.Utils;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -282,6 +265,39 @@ public class ShopDetailsPresenter implements ShopDetailsMVP.Presenter {
                     view.showToastShortTime(t.getMessage());
                 } else {
                     view.showToastShortTime("Error while fetching products.");
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void addToCartApi(String productId, String quantity, String price, String discountPrice, String randomKey) {
+        view.showProgressDialogPleaseWait();
+        model.addToCart(productId, quantity, price, discountPrice, randomKey, new INetworkListGeneral<ResponseBody>() {
+            @Override
+            public void onSuccess(ResponseBody response) {
+                view.hideProgressDialogPleaseWait();
+                view.hideCircularProgressBar();
+
+                if (response == null) {
+                    view.showToastShortTime("Error while add to cart.");
+
+                    return;
+                } else {
+                    view.showToastShortTime("Item added to cart.");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                view.hideCircularProgressBar();
+                view.hideProgressDialogPleaseWait();
+                if (t.getMessage() != null) {
+                    view.showToastShortTime(t.getMessage());
+                } else {
+                    view.showToastShortTime("Error while add product.");
                 }
 
             }

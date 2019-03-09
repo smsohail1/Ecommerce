@@ -1,6 +1,7 @@
 package com.xekera.Ecommerce.data.rest;
 
 import com.xekera.Ecommerce.data.rest.response.*;
+import com.xekera.Ecommerce.data.rest.response.add_to_cart_response.AddToCartResponse;
 import com.xekera.Ecommerce.data.rest.response.searchAllProductReponse.AllProductsResponse;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
 import okhttp3.ResponseBody;
@@ -19,6 +20,9 @@ public interface XekeraAPI {
     String WEB_API_SUBMIT_ORDER = "Submit_Order/";
     String WEB_API_HISTORY_ID = "Order_Histroy/";
     String WEB_API_ALL_PRODUCTS = "products/";
+    String WEB_API_ADD_TO_CART_ORDER = "Submit_Order/";
+    String WEB_API_FETCH_ALL_CART_ORDER = "products/";
+
 
     @FormUrlEncoded
     @POST(WEB_API_SIGN_UP_URL + "signup.php")
@@ -51,6 +55,16 @@ public interface XekeraAPI {
     @GET(WEB_API_CATEGORY_URL + "readaip.php")
     Call<CategoryResponse> getCategory();
 
+
+    @GET(WEB_API_ADD_TO_CART_ORDER + "addtocartweb.php")
+    Call<ResponseBody> addToProducts(@Query("product_id") String product_id,
+                                     @Query("itemQuantity") String itemQuantity,
+                                     @Query("itemPrice") String itemPrice,
+                                     @Query("last_id") String last_id);
+
+
+    @GET(WEB_API_FETCH_ALL_CART_ORDER + "cartproducts.php")
+    Call<AddToCartResponse> getAllCarts(@Query("cartId") String cartId);
 
 //
 //    @POST("/api/employee/checkin")

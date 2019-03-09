@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.xekera.Ecommerce.App;
 import com.xekera.Ecommerce.R;
+import com.xekera.Ecommerce.data.rest.response.add_to_cart_response.Product;
 import com.xekera.Ecommerce.data.room.model.AddToCart;
 import com.xekera.Ecommerce.ui.BaseActivity;
 import com.xekera.Ecommerce.ui.adapter.AddToCartAdapter;
@@ -28,6 +29,7 @@ import com.xekera.Ecommerce.ui.login.LoginFragment;
 import com.xekera.Ecommerce.ui.shop_card_selected.ShopCardSelectedFragment;
 import com.xekera.Ecommerce.ui.shop_card_selected.add_to_cart_shop_details.AddToCartShopCardSelectedFragment;
 import com.xekera.Ecommerce.util.*;
+import org.json.JSONArray;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -220,10 +222,16 @@ public class AddToCartFragment extends Fragment implements AddToCartMVP.View, Ad
 
         isProgressBarShowing = true;
         progressBarRelativeLayout.setVisibility(View.VISIBLE);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                presenter.fetchCartDetails();
+                if (utils.isInternetAvailable()) {
+                    presenter.fetchCartsFromServer(sessionManager.getKeyRandomKey());
+                } else {
+                    showToastShortTime("Please connect to internet.");
+                }
+                // presenter.fetchCartDetails();
 
             }
         }, 500);
@@ -320,13 +328,13 @@ public class AddToCartFragment extends Fragment implements AddToCartMVP.View, Ad
 
     }
 
-    @Override
-    public void incrementDecrement(String quantity, long individualPrice, String itemPrice, String productName,
-                                   String cutPrice, byte[] bytes, String imgUrl, String prodcutID, String isEmailSent,
-                                   String productDesc, String imgArrList,String nameSku) {
-        presenter.saveProductDetails(quantity, individualPrice, itemPrice, productName,
-                cutPrice, bytes, imgUrl, prodcutID, isEmailSent, productDesc, imgArrList,nameSku);
-    }
+//    @Override
+//    public void incrementDecrement(String quantity, long individualPrice, String itemPrice, String productName,
+//                                   String cutPrice, byte[] bytes, String imgUrl, String prodcutID, String isEmailSent,
+//                                   String productDesc, String imgArrList, String nameSku) {
+//        presenter.saveProductDetails(quantity, individualPrice, itemPrice, productName,
+//                cutPrice, bytes, imgUrl, prodcutID, isEmailSent, productDesc, imgArrList, nameSku);
+//    }
 
     @Override
     public void removeItemFromCart(final AddToCart productItems, final int position) {
@@ -340,18 +348,20 @@ public class AddToCartFragment extends Fragment implements AddToCartMVP.View, Ad
 
     @Override
     public void onCardClick(final String productName, final String price, final String cutPrice, final String quantity,
-                            final String img, final String imgList, final String productID, final String about
+                            final String img, final List<String> imgList, final String productID, final String about
             , final String nameSku) {
 
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                JSONArray json = new JSONArray(imgList);
+                String jsonString = json.toString();
 
                 AddToCartShopCardSelectedFragment addToCartShopCardSelectedFragment = new AddToCartShopCardSelectedFragment();
                 ((BaseActivity) getActivity()).replaceFragmentForActivityTranstion(
                         addToCartShopCardSelectedFragment.newInstance(productName,
-                                price, cutPrice, quantity, img, imgList, productID, about, "", nameSku));
+                                price, cutPrice, quantity, img, jsonString, productID, about, "", nameSku));
             }
         }, 100);
 
@@ -443,7 +453,7 @@ public class AddToCartFragment extends Fragment implements AddToCartMVP.View, Ad
     }
 
     @Override
-    public void setAdapter(List<AddToCart> addToCarts) {
+    public void setAdapter(List<Product> addToCarts) {
 
         adapter = new AddToCartAdapter(addToCarts, this);
         showRecylerViewProductsDetail(adapter);
@@ -457,12 +467,12 @@ public class AddToCartFragment extends Fragment implements AddToCartMVP.View, Ad
         adapter.removeItem(position);
     }
 
-    private void getSubTotal(List<AddToCart> addToCarts) {
+    private void getSubTotal(List<Product> addToCarts) {
         long price = 0;
 
-        for (AddToCart i : addToCarts) {
-            price = price + Long.valueOf(i.getItemPrice());
-            // price = price + (Long.valueOf(i.getItemPrice()) * Long.valueOf(i.getItemQuantity()));
+        for (Product i : addToCarts) {
+            price = price + (Long.valueOf(i.getPrice()) * Long.valueOf(i.getItemQuantity()));
+            //  price = price + Long.valueOf(i.getItemPrice());
 
         }
         setSubTotal(String.valueOf(price));
