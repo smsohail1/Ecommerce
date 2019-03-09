@@ -19,9 +19,8 @@ public class AppConstants {
 
 
     //Sir farrukh contact number
-    //public static final String support_contact_no = "+923345290597";
-    public static final String support_contact_no = "+923332542126";
-
+    public static final String support_contact_no = "+923345290597";
+    //public static final String support_contact_no = "+923332542146";
     public static final String supportEmail = "support@circuit.pk";
 
 
